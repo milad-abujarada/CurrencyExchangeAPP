@@ -1,11 +1,19 @@
 const request = require('request');
 const passport = require('passport');
 const  APIkey = require('../config/env');
-const currency = require('../models/currency');
+const Currency = require('../models/currency');
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 function getRoot(req, res){
-	res.send('Home Page');
+	let newCurrency = new Currency();
+	let currencies = [];
+	newCurrency.collection.find().forEach(function(results){
+		currencies.push(results);
+	}, function(){
+		res.render('landingPage', {currencies:currencies});;
+	});
 };
+
+
 
 function getSignUp(req, res){
 	res.render('signup');
@@ -40,20 +48,22 @@ function getExchangeRate(req, res){
 };
 
 function getCurrencies(req, res){
-	let URL = URL_prefix + 'currencies?apiKey=' + APIkey;
+	let URL = URL_prefix + 'countries?apiKey=' + APIkey;
 	request(URL, function(req, res, body){
-		let drop = currency;
+		let drop = new Currency();
 		drop.collection.remove();
 		let currencies = JSON.parse(body);
+
 		let i = 0;
 		for(let property in currencies){
+			let i = 0;
 			for (let nestedProperty in currencies[property]){
-				let newCurrency = currency();
-				/*console.log("currency Name: ", currencies[property][nestedProperty]["currencyName"]);
-				console.log("currency Symbol: ", currencies[property][nestedProperty]["currencySymbol"]);
-				console.log("currency id: ", currencies[property][nestedProperty]["id"]);*/
+				i++;
+				console.log(currencies[property][nestedProperty]['currencyName'], i);
+				let newCurrency = new Currency();
+				newCurrency.countryName = currencies[property][nestedProperty]["name"];
 				newCurrency.currencyName = currencies[property][nestedProperty]["currencyName"];
-				newCurrency.currencyId = currencies[property][nestedProperty]["id"];
+				newCurrency.currencyId = currencies[property][nestedProperty]["currencyId"];
 				if(currencies[property][nestedProperty]["currencySymbol"]){
 					newCurrency.currencySymbol = currencies[property][nestedProperty]["currencySymbol"];
 				};
