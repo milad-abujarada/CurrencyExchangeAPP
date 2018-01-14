@@ -1,6 +1,7 @@
 const request = require('request');
 const passport = require('passport');
 const  APIkey = require('../config/env');
+const currency = require('../models/currency');
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 function getRoot(req, res){
 	res.send('Home Page');
@@ -39,8 +40,35 @@ function getExchangeRate(req, res){
 };
 
 function getCurrencies(req, res){
+	let URL = URL_prefix + 'currencies?apiKey=' + APIkey;
+	request(URL, function(req, res, body){
+		let drop = currency;
+		drop.collection.remove();
+		let currencies = JSON.parse(body);
+		let i = 0;
+		for(let property in currencies){
+			for (let nestedProperty in currencies[property]){
+				let newCurrency = currency();
+				/*console.log("currency Name: ", currencies[property][nestedProperty]["currencyName"]);
+				console.log("currency Symbol: ", currencies[property][nestedProperty]["currencySymbol"]);
+				console.log("currency id: ", currencies[property][nestedProperty]["id"]);*/
+				newCurrency.currencyName = currencies[property][nestedProperty]["currencyName"];
+				newCurrency.currencyId = currencies[property][nestedProperty]["id"];
+				if(currencies[property][nestedProperty]["currencySymbol"]){
+					newCurrency.currencySymbol = currencies[property][nestedProperty]["currencySymbol"];
+				};
+				newCurrency.save();
+			};
+			
+		};
+		sendResponse("currencies were retreived successfully!");
+	});
+	function sendResponse(message){
+		res.json(message);
+	};
+};
 
-}
+
 
 module.exports.getRoot = getRoot;
 module.exports.getNew = getNew;
