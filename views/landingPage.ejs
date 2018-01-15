@@ -2,6 +2,7 @@
 <h1>Xchange it</h1>
 <p>
 	<ul>
+		<li>Exchange rates for 200+ currencies.</li>
 		<li>Up to the minute currency exchange rates.</li>
 		<li>Up to a year of history of a currancy exchange rates.</li>
 		<li>Create an account and have access to your search results history.</li>
@@ -11,11 +12,13 @@
 	<input type="email" name="userName" placeholder="User Name">
 	<input type="password" name="password" placeholder="Password">
 	<input type="submit" value="LOG IN">
-	<input type="button" value="SIGN UP">
 </form>
+<p>
+	Don't have an account? <a href="/signup">SIGN UP</a> 
+</p>
 <label for="tryIt">Try it:</label>
 <div id="tryIt">	
-	<label>Xchange it:
+	<label>Exchange:
 		<select id="from">
 			<% for(let i = 0; i < currencies.length; i++){ %>
 				<% if(currencies[i].currencySymbol){%>
