@@ -29,7 +29,7 @@ app.use(flash());
 require('./config/passport')(passport);
 
 app.use(function(req,res,next){
-	console.log('A request was just recieved');
+	console.log('Hit');
 	next();
 });
 

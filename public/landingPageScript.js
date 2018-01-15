@@ -13,8 +13,14 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		for(let property in res){
 			ids.push(property);
 		};
+		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
+		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
 		$("#result").html("");
-		$("#result").append(selectFrom + " to " + selectTo + " : " + res[ids[0]] + " and " + selectTo + " to " + selectFrom + ": " + res[ids[1]] );
+		$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[0]])
+		if(selectFrom !== selectTo){
+			$("#reverseResult").html("");
+			$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[1]] );
+		};
 	});
 });
 function getCountryName(string){
@@ -24,3 +30,10 @@ function getCountryName(string){
 	};
 	return string.substring(0,(index - 1));
 };
+function getCurrencyNameAndSymbol(string){
+	let index = 0;
+	while (string[index] !== '/'){
+		index++;
+	};
+	return string.substring((index + 1),(string.length));
+}

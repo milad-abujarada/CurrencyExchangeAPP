@@ -26,7 +26,7 @@ module.exports = function(passport){
 				console.log('Found user');
 				return callback(null, false, req.flash('signupMessage', 'Email in use'));
 				//you are new
-			}else{
+			} else{
 				let newUser = new User();
 				newUser.email = email;
 				newUser.password = newUser.encrypt(password);
