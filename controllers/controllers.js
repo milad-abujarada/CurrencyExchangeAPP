@@ -6,7 +6,7 @@ var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 function getRoot(req, res){
 	let newCurrency = new Currency();
 	let currencies = [];
-	newCurrency.collection.find().forEach(function(results){
+	newCurrency.collection.find().sort( { countryName: 1 }).forEach(function(results){
 		currencies.push(results);
 	}, function(){
 		res.render('landingPage', {currencies:currencies});;
