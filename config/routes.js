@@ -9,8 +9,6 @@ router.get('/signup', controllers.getSignUp);
 
 router.post('/signup', controllers.postSignUp);
 
-router.get('/new', controllers.getNew);
-
 router.get('/exchangeRate', controllers.getExchangeRate);
 
 router.get('/currencies', controllers.getCurrencies);
