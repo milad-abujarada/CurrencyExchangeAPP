@@ -1,6 +1,6 @@
 const request = require('request');
 const passport = require('passport');
-const  APIkey = require('../config/env');
+const  APIkey = process.env.APIkey || require('../config/env');
 const Currency = require('../models/currency');
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 
