@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGODB_URI ||
 
 const router = require(__dirname + '/config/routes');
 
-var PORT = process.env.port || 3000;
+var PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended: true}));
 
