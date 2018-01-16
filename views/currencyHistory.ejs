@@ -1,25 +1,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <h1>Xchange it</h1>
-<p>
-	<ul>
-		<li>Exchange rates for 200+ currencies.</li>
-		<li>Up to the minute currency exchange rates.</li>
-		<li>Up to a year of history of a currancy exchange rates.</li>
-		<li>Create an account and have access to your search results history.</li>
-	</ul>
-</p>
-<form method="GET" action="#">
-	<input type="email" name="userName" placeholder="User Name">
-	<input type="password" name="password" placeholder="Password">
-	<input type="submit" value="LOG IN">
-</form>
-<p>
-	Don't have an account? <a href="/signup">SIGN UP</a> 
-</p>
-<label for="tryIt">Try it:</label>
-<div id="tryIt">	
+
+<div>	
 	<label>Exchange:
-		<select id="from">
+		<select id="currencyFrom">
 			<% for(let i = 0; i < currencies.length; i++){ %>
 				<% if(currencies[i].currencySymbol){%>
 						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
@@ -30,7 +15,7 @@
 		</select>
 	</label>
 	<label> To:
-		<select id="to">
+		<select id="currencyTo">
 			<% for(let i = 0; i < currencies.length; i++){ %>
 				<% if(currencies[i].currencySymbol){%>
 						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
@@ -40,10 +25,16 @@
 			<% } %>
 		</select>
 	</label>
-	<input type="button" value="Xchange it!" id="xchangeIt">
-	<label for="result"> Exchange rate:</label>
+	<label>From:
+		<input type="date" name="fromDate" id="fromDate">
+	</label>
+	<label>To:
+		<input type="date" name="toDate" id="toDate">
+	</label>
+	<input type="button" value="Xchange it! History" id="xchangeIt">
+	<label for="result"> Exchange rate History:</label>
 	<br>
-	<div id="result"></div>
-	<div id="reverseResult"></div>
+	<canvas id="myChart"></canvas>
+	
 </div>
-<script type="text/javascript" src='/scripts/landingPageScript.js' ></script>
+<script type="text/javascript" src='/scripts/currencyHistoryScript.js' ></script>

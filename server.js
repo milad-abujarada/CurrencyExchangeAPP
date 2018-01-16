@@ -10,7 +10,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(process.env.MONGODB_URI ||
+                 process.env.MONGOLAB_URI ||
+                 process.env.MONGOHQ_URL ||'mongodb://localhost/test');
 
 const router = require(__dirname + '/config/routes');
 
