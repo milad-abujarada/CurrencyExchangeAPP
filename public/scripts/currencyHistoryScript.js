@@ -7,11 +7,32 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	let fromDate = $("#fromDate").val();
 	let toDate = $("#toDate").val();
 	console.log('from:', selectFrom,' to:', selectTo, ' old date:', fromDate, ' new date:', toDate );
+	let dataFrom = [];
+	let dataTo = [];
+	let dates = [];
 	$.ajax({
 		url:'http://localhost:3000/getCurrencyHistory', 
 		data:{ from:from, to:to, fromDate:fromDate, toDate:toDate }
 	}).done(function(res){
-		console.log(res);
+		response = JSON.parse(res);
+		
+		//console.log(typeof(response));
+		var index = 0;
+		for (property in response){
+			//console.log(property);
+			for(nestedProperty in response[property]){
+				//console.log(response[property][nestedProperty]);
+				if(index){
+					dataTo.push(response[property][nestedProperty]);
+					dates.push(nestedProperty);
+				}else{
+					dataFrom.push(response[property][nestedProperty]);
+				};
+				//typeof(response[property].nestedProperty));
+			};
+			index++;
+		};
+		console.log("dataFrom", dataFrom, "\ndataTo", dataTo, "\ndates", dates);
 	/*	res = JSON.parse(res);
 		let ids = [];
 		for(let property in res){
@@ -19,19 +40,26 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		};*/
 		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
 		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
+
+
 		var ctx = document.getElementById('myChart').getContext('2d');
 		var chart = new Chart(ctx, {
 		    // The type of chart we want to create
-		    type: 'line',
+		    type: 'bar',
 
 		    // The data for our dataset
 		    data: {
-		        labels: ["January", "February", "March", "April", "May", "June", "July"],
+		        labels: dates,
 		        datasets: [{
-		            label: "My First dataset",
+		            label: fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol,
 		            backgroundColor: 'rgb(255, 99, 132)',
 		            borderColor: 'rgb(255, 99, 132)',
-		            data: [0, 10, 5, 2, 20, 30, 45],
+		            data: dataFrom,
+		        },{
+		            label: toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol ,
+		            backgroundColor: 'rgb(255, 199, 132)',
+		            borderColor: 'rgb(255, 199, 132)',
+		            data: dataTo,
 		        }]
 		    },
 

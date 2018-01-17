@@ -1,49 +1,61 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<h1>Xchange it</h1>
-<p>
-	<ul>
-		<li>Exchange rates for 200+ currencies.</li>
-		<li>Up to the minute currency exchange rates.</li>
-		<li>Up to a year of history of a currancy exchange rates.</li>
-		<li>Create an account and have access to your search results history.</li>
-	</ul>
-</p>
-<form method="GET" action="#">
-	<input type="email" name="userName" placeholder="User Name">
-	<input type="password" name="password" placeholder="Password">
-	<input type="submit" value="LOG IN">
-</form>
-<p>
-	Don't have an account? <a href="/signup">SIGN UP</a> 
-</p>
-<label for="tryIt">Try it:</label>
-<div id="tryIt">	
-	<label>Exchange:
-		<select id="from">
-			<% for(let i = 0; i < currencies.length; i++){ %>
-				<% if(currencies[i].currencySymbol){%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-					<%} else {%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-					<%}%>
-			<% } %>
-		</select>
-	</label>
-	<label> To:
-		<select id="to">
-			<% for(let i = 0; i < currencies.length; i++){ %>
-				<% if(currencies[i].currencySymbol){%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-					<%} else {%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-					<%}%>
-			<% } %>
-		</select>
-	</label>
-	<input type="button" value="Xchange it!" id="xchangeIt">
-	<label for="result"> Exchange rate:</label>
-	<br>
-	<div id="result"></div>
-	<div id="reverseResult"></div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div class="container-fluid">
+	<div class="col-12">
+		<h1>Xchange it</h1>
+		<div class="col-sm-4">
+			<ul>
+				<li>Exchange rates for 200+ currencies.</li>
+				<li>Up to the minute currency exchange rates.</li>
+				<li>Up to a year of history of a currancy exchange rates.</li>
+				<li>Create an account and have access to your search results history.</li>
+			</ul>
+		</div>
+		<div class="col-sm-4">
+			<form method="GET" action="#" >
+				<div class="form-group" class="col-xs-4">
+					<label class="form-group" class="sr-only">User name:</label>
+					<input type="email" name="userName"  class="form-control">
+				</div>
+				<div class="form-group" class="col-xs-4">
+					<label class="form-group" class="sr-only">Password:</label>
+					<input type="password" name="password"  class="form-control">
+				</div>
+				<input type="submit" value="LOG IN" class="btn btn-info btn-primary btn-md">
+			</form>
+			Don't have an account? <a href="/signup">SIGN UP</a> 
+		</div>
+	</div>
+	<div id="tryIt" class="col-sm-6">
+		<label for="tryIt">Try it:</label>	
+		<label>Exchange:
+			<select id="from">
+				<% for(let i = 0; i < currencies.length; i++){ %>
+					<% if(currencies[i].currencySymbol){%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+						<%} else {%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+						<%}%>
+				<% } %>
+			</select>
+		</label>
+		<label> To:
+			<select id="to">
+				<% for(let i = 0; i < currencies.length; i++){ %>
+					<% if(currencies[i].currencySymbol){%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+						<%} else {%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+						<%}%>
+				<% } %>
+			</select>
+		</label>
+		<input type="button" value="Xchange it!" id="xchangeIt" class="btn btn-info btn-primary btn-md">
+		<label for="result"> Exchange rate:</label>
+		<br>
+		<div id="result"></div>
+		<div id="reverseResult"></div>
+	</div>
 </div>
 <script type="text/javascript" src='/scripts/landingPageScript.js' ></script>
