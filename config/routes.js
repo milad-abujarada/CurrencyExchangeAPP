@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const controllers = require("../controllers/controllers");
 
-router.get('/currencies', controllers.getCurrencies);
+router.get('/currenciesInfo', controllers.getCurrenciesInfo);
+
+router.get('/exchageRate/new', controllers.newExchangeRate);
 
 router.get('/exchangeRate', controllers.getExchangeRate);
 
-router.get('/history', controllers.history);
+router.get('/currencyHistory/new', controllers.newCurrencyHistory);
 
 router.get('/getCurrencyHistory', controllers.getCurrencyHistory);
 

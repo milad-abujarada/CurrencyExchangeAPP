@@ -4,7 +4,7 @@ const  APIkey = process.env.APIkey || require('../config/env');
 const Currency = require('../models/currency');
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 
-function getCurrencies(req, res){
+function getCurrenciesInfo(req, res){
 	let URL = URL_prefix + 'countries?apiKey=' + APIkey;
 	request(URL, function(req, res, body){
 		let drop = new Currency();
@@ -30,6 +30,15 @@ function getCurrencies(req, res){
 };
 
 
+function newExchangeRate(request, response){
+	let newCurrency = new Currency();
+	newCurrency.collection.find().sort( { countryName: 1 }).toArray(function(err, currencies){
+		//console.log(currencies[0]['countryName'] + ' / ' + currencies[0]['currencyName'] + ' / ' + currencies[0]['currencySymbol']);
+		response.render('newExchangeRate', {currencies:currencies});
+	});
+};
+
+
 function getExchangeRate(req, response){
 	let fromCurrency = new Currency;
 	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
@@ -44,15 +53,15 @@ function getExchangeRate(req, response){
 };
 
 
-function history(req, res){
+function newCurrencyHistory(req, res){
 	let newCurrency = new Currency();
 	newCurrency.collection.find().sort( { countryName: 1 }).toArray(function(err, currencies){
 		//console.log(currencies[0]['countryName'] + ' / ' + currencies[0]['currencyName'] + ' / ' + currencies[0]['currencySymbol']);
-		res.render('currencyHistory', {currencies:currencies});
+		res.render('newCurrencyHistory', {currencies:currencies});
 	});
 };
 
-https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
+//https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
 function getCurrencyHistory(req, response){
 	let fromCurrency = new Currency;
 	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
@@ -93,9 +102,10 @@ function postSignUp(req, res, next){
 }
 
 
-module.exports.getCurrencies = getCurrencies;
+module.exports.getCurrenciesInfo = getCurrenciesInfo;
+module.exports.newExchangeRate = newExchangeRate;
 module.exports.getExchangeRate = getExchangeRate;
-module.exports.history = history;
+module.exports.newCurrencyHistory = newCurrencyHistory;
 module.exports.getCurrencyHistory = getCurrencyHistory;
 module.exports.getRoot = getRoot;
 module.exports.getSignUp = getSignUp;

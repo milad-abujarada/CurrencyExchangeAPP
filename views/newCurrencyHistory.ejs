@@ -1,9 +1,7 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<%- include header.ejs %>
+
 <div class="container-fluid">
-	<h1>Xchange it</h1>	
 	<div class="col-sm-6">
 		<label>Exchange:
 			<select id="currencyFrom">
@@ -37,7 +35,7 @@
 		</label>
 		<input type="button" value="Xchange it! History" id="xchangeIt" class="btn btn-info btn-primary btn-md">
 	</div>
-	<div class="col-12"> Exchange rate History:</div>
+	<div> Exchange rate History:</div>
 	<div style="width:75%; margin: 0 auto;">
 
 		<canvas id="myChart" ></canvas>
