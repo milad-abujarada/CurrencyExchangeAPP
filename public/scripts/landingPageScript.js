@@ -1,9 +1,9 @@
-const os = require('os');
+/*const os = require('../os');
 if (os.userInfo().username === "miladabujarada"){
 	let URI = 'http://localhost/3000/exchangeRate';
-} else {
+} else {*/
 	let URI = 'https://mysterious-waters-61063.herokuapp.com/exchangeRate';
-}
+/*}*/
 console.log('file is working');
 var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function(){
 	let selectFrom = $("#from").val();
