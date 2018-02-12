@@ -5,7 +5,7 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	let selectTo = $("#to").val();
 	to = getCountryName(selectTo);
 	$.ajax({
-		url:'http://localhost:3000/exchangeRate', 
+		url:'https://localhost:3000/exchangeRate', 
 		data:{ from:from, to:to }
 	}).done(function(res){
 		res = JSON.parse(res);

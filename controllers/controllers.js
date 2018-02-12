@@ -2,9 +2,10 @@ const request = require('request');
 const passport = require('passport');
 const  APIkey = process.env.APIkey || require('../config/env');
 const Currency = require('../models/currency');
+const ExchangeRate = require('../models/exchangeRate');
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 
-function getCurrenciesInfo(req, res){
+function getCurrenciesInfo(request, response){
 	let URL = URL_prefix + 'countries?apiKey=' + APIkey;
 	request(URL, function(req, res, body){
 		let drop = new Currency();
@@ -25,7 +26,7 @@ function getCurrenciesInfo(req, res){
 		sendResponse("currencies were retreived successfully!");
 	});
 	function sendResponse(message){
-		res.json(message);
+		response.json(message);
 	};
 };
 
@@ -33,7 +34,6 @@ function getCurrenciesInfo(req, res){
 function newExchangeRate(request, response){
 	let newCurrency = new Currency();
 	newCurrency.collection.find().sort( { countryName: 1 }).toArray(function(err, currencies){
-		//console.log(currencies[0]['countryName'] + ' / ' + currencies[0]['currencyName'] + ' / ' + currencies[0]['currencySymbol']);
 		response.render('newExchangeRate', {currencies:currencies});
 	});
 };
@@ -53,6 +53,18 @@ function getExchangeRate(req, response){
 };
 
 
+function postExchangeRate(request, response){
+	let exchangeRate = new ExchangeRate();
+	exchangeRate.date = Date();
+	exchangeRate.from = request.body.from;
+	exchangeRate.to = request.body.to;
+	exchangeRate.fromRate = request.body.fromRate;
+	exchangeRate.toRate = request.body.toRate;
+	exchangeRate.comments = request.body.comments;
+	exchangeRate.save();
+};
+
+
 function newCurrencyHistory(req, res){
 	let newCurrency = new Currency();
 	newCurrency.collection.find().sort( { countryName: 1 }).toArray(function(err, currencies){
@@ -62,8 +74,8 @@ function newCurrencyHistory(req, res){
 };
 
 //https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
-function getCurrencyHistory(req, response){
-	let fromCurrency = new Currency;
+function getCurrencyHistory(request, response){
+	let fromCurrency = new Currency();
 	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
 		let toCurrency = new Currency;
 		toCurrency.collection.find({countryName:req.query.to}, {currencyId:1, _id:0}).toArray(function(err, doc_to){
@@ -76,29 +88,29 @@ function getCurrencyHistory(req, response){
 };
 
 
-function getRoot(req, res){
+function getRoot(request, response){
 	let newCurrency = new Currency();
 	let currencies = [];
 	newCurrency.collection.find().sort( { countryName: 1 }).forEach(function(results){
 		currencies.push(results);
 	}, function(){
-		res.render('landingPage', {currencies:currencies});
+		response.render('landingPage', {currencies:currencies});
 	});
 };
 
 
-function getSignUp(req, res){
-	res.render('signup');
+function getSignUp(request, response){
+	response.render('signup');
 }
 
-function postSignUp(req, res, next){
+function postSignUp(request, response, next){
 	let signupStrategy = passport.authenticate('local-signup',{
 		successRedirect:'/',
 		failureRedirect:'/signup',
 		failureFlash: true
 	});
 
-	return signupStrategy(req, res, next);
+	return signupStrategy(request, ressponse, next);
 }
 
 
