@@ -1,3 +1,9 @@
+const os = require('os');
+if (os.userInfo().username === "miladabujarada"){
+	let URI = 'http://localhost/3000/exchangeRate';
+} else {
+	let URI = 'https://mysterious-waters-61063.herokuapp.com/exchangeRate';
+}
 console.log('file is working');
 var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function(){
 	let selectFrom = $("#from").val();
@@ -5,7 +11,7 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	let selectTo = $("#to").val();
 	to = getCountryName(selectTo);
 	$.ajax({
-		url:'https://mysterious-waters-61063.herokuapp.com/exchangeRate', 
+		url:URI, 
 		data:{ from:from, to:to }
 	}).done(function(res){
 		res = JSON.parse(res);
