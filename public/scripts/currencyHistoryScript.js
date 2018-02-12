@@ -11,7 +11,7 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	let dataTo = [];
 	let dates = [];
 	$.ajax({
-		url:'http://localhost:3000/getCurrencyHistory', 
+		url:'https://mysterious-waters-61063.herokuapp.com/getCurrencyHistory', 
 		data:{ from:from, to:to, fromDate:fromDate, toDate:toDate }
 	}).done(function(res){
 		response = JSON.parse(res);
