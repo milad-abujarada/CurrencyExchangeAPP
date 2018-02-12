@@ -74,7 +74,7 @@ function newCurrencyHistory(req, res){
 };
 
 //https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
-function getCurrencyHistory(request, response){
+function getCurrencyHistory(req, response){
 	let fromCurrency = new Currency();
 	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
 		let toCurrency = new Currency;
