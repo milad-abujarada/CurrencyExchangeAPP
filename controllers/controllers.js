@@ -80,6 +80,7 @@ function getCurrencyHistory(request, response){
 		let toCurrency = new Currency;
 		toCurrency.collection.find({countryName:req.query.to}, {currencyId:1, _id:0}).toArray(function(err, doc_to){
 			let URL = URL_prefix + 'convert?q=' + doc_from[0]['currencyId'] + '_' + doc_to[0]['currencyId'] + ',' + doc_to[0]['currencyId'] + '_' + doc_from[0]['currencyId'] + '&compact=ultra&' + 'date=' + req.query.fromDate + '&endDate=' + req.query.toDate + '&apiKey=' + APIkey;
+			console.log(URL);
 			request(URL,  function(req,res){
 				response.json(res.body)
 			});
