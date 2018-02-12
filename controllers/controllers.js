@@ -95,12 +95,8 @@ function getRoot(request, response){
 	newCurrency.collection.find().sort( { countryName: 1 }).forEach(function(results){
 		currencies.push(results);
 	}, function(){
-		if (process.env.PORT){
-			localhost = false;
-		} else {
-			localhost = true;
-		}
-		console.log(localhost);
+		
+		let localhost = checkLocalhostOrHeroku();
 		response.render('landingPage', {currencies:currencies,heroku:localhost});
 	});
 	console.log(process.env.PORT);
@@ -121,6 +117,15 @@ function postSignUp(request, response, next){
 	return signupStrategy(request, ressponse, next);
 }
 
+let checkLocalhostOrHeroku = () => {
+	let localhost;
+	if (process.env.PORT){
+			localhost = false;
+		} else {
+			localhost = true;
+		};
+		return localhost;
+};
 
 module.exports.getCurrenciesInfo = getCurrenciesInfo;
 module.exports.newExchangeRate = newExchangeRate;
