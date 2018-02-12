@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/currencyExchange'); 
-var db = mongoose.connection;
+
+mongoose.connect(process.env.MONGODB_URI ||
+                 process.env.MONGOLAB_URI ||
+                 process.env.MONGOHQ_URL ||'mongodb://localhost/test'); 
+// var db = mongoose.connection;
 //console.log(db);
 //console.log('Connected to the DB');
 var UserSchema = new mongoose.Schema({

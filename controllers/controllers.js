@@ -32,10 +32,10 @@ function getCurrenciesInfo(request, response){
 
 
 function newExchangeRate(request, response){
-	let newCurrency = new Currency();
-	newCurrency.collection.find().sort( { countryName: 1 }).toArray(function(err, currencies){
+	//let newCurrency = new Currency();
+	Currency.find({})/*.sort( { countryName: 1 }).toArray(function(err, currencies){
 		response.render('newExchangeRate', {currencies:currencies});
-	});
+	})*/;
 };
 
 
@@ -75,12 +75,12 @@ function newCurrencyHistory(req, res){
 
 //https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
 function getCurrencyHistory(req, response){
+	console.log(req);
 	let fromCurrency = new Currency();
 	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
 		let toCurrency = new Currency;
 		toCurrency.collection.find({countryName:req.query.to}, {currencyId:1, _id:0}).toArray(function(err, doc_to){
 			let URL = URL_prefix + 'convert?q=' + doc_from[0]['currencyId'] + '_' + doc_to[0]['currencyId'] + ',' + doc_to[0]['currencyId'] + '_' + doc_from[0]['currencyId'] + '&compact=ultra&' + 'date=' + req.query.fromDate + '&endDate=' + req.query.toDate + '&apiKey=' + APIkey;
-			console.log(URL);
 			request(URL,  function(req,res){
 				response.json(res.body)
 			});
@@ -95,8 +95,15 @@ function getRoot(request, response){
 	newCurrency.collection.find().sort( { countryName: 1 }).forEach(function(results){
 		currencies.push(results);
 	}, function(){
-		response.render('landingPage', {currencies:currencies});
+		if (process.env.PORT){
+			localhost = false;
+		} else {
+			localhost = true;
+		}
+		console.log(localhost);
+		response.render('landingPage', {currencies:currencies,heroku:localhost});
 	});
+	console.log(process.env.PORT);
 };
 
 

@@ -1,5 +1,5 @@
 console.log('file is working');
-var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function(){
+var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function() {
 	let selectFrom = $("#currencyFrom").val();
 	from = getCountryName(selectFrom);
 	let selectTo = $("#currencyTo").val();
@@ -10,10 +10,21 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	let dataFrom = [];
 	let dataTo = [];
 	let dates = [];
+	let commentDiv =  document.getElementById("commentDiv");
+	if(commentDiv){
+		commentDiv.parentNode.removeChild(commentDiv);
+	};
+	
 	$.ajax({
-		url:'https://mysterious-waters-61063.herokuapp.com/getCurrencyHistory', 
-		data:{ from:from, to:to, fromDate:fromDate, toDate:toDate }
-	}).done(function(res){
+		// https://mysterious-waters-61063.herokuapp.com
+		url:'http://localhost:3000/getCurrencyHistory', 
+		data:{ 
+			from:from, 
+			to:to, 
+			fromDate:fromDate, 
+			toDate:toDate 
+		}
+	}).done(function(res) {
 		response = JSON.parse(res);
 		
 		//console.log(typeof(response));
@@ -72,6 +83,25 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 			$("#reverseResult").html("");
 			$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[1]] );
 		};*/
+		//let body = document.getElementsByTagName("body");
+		let commentDiv =  document.createElement("div");
+		commentDiv.setAttribute("id", "commentDiv");
+		document.body.appendChild(commentDiv);
+		let commentLabel = document.createElement("label");
+		commentLabel.innerText ="comment";
+		commentDiv = document.getElementById("commentDiv");
+		commentDiv.appendChild(commentLabel);
+		let commentTextarea = document.createElement("textarea");
+		commentDiv.appendChild(commentTextarea);
+		let saveButton =  document.createElement("button");
+		saveButton.innerText = "save search result";
+		commentDiv.appendChild(saveButton);
+		//console.log(body);
+		/*document.body.appendChild(commentLabel);
+		document.body.appendChild(textArea);
+		document.body.appendChild(button);*/
+		
+		/*document.createElement("label").appendChild("body");*/
 	});
 });
 function getCountryName(string){

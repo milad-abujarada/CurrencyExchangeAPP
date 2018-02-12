@@ -1,11 +1,11 @@
-/*const os = require('../os');
-if (os.userInfo().username === "miladabujarada"){
-	let URI = 'http://localhost/3000/exchangeRate';
-} else {*/
-	let URI = 'https://mysterious-waters-61063.herokuapp.com/exchangeRate';
-/*}*/
 console.log('file is working');
 var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function(){
+	let checkLocalhost = document.getElementById("localhost"), URI;
+	if(checkLocalhost.innerText === "true") {
+		URI = 'http://localhost:3000/exchangeRate';
+	} else {
+		URI = 'https://mysterious-waters-61063.herokuapp.com/exchangeRate';
+	}
 	let selectFrom = $("#from").val();
 	from = getCountryName(selectFrom);
 	let selectTo = $("#to").val();
