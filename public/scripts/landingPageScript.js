@@ -23,10 +23,10 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
 		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
 		$("#result").html("");
-		$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[0]])
+		$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[1]])
 		if(selectFrom !== selectTo){
 			$("#reverseResult").html("");
-			$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[1]] );
+			$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[0]] );
 		};
 	});
 });
