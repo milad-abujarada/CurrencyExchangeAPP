@@ -15,6 +15,7 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		data:{ from:from, to:to }
 	}).done(function(res){
 		res = JSON.parse(res);
+		console.log(res);
 		let ids = [];
 		for(let property in res){
 			ids.push(property);
