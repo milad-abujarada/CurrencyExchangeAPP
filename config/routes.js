@@ -4,15 +4,15 @@ const controllers = require("../controllers/controllers");
 
 router.get('/currenciesInfo', controllers.getCurrenciesInfo);
 
-router.get('/exchageRate/new', controllers.newExchangeRate);
+router.get('/', controllers.getRoot);
 
 router.get('/exchangeRate', controllers.getExchangeRate);
+
+router.get('/exchageRate/new', controllers.newExchangeRate);
 
 router.get('/currencyHistory/new', controllers.newCurrencyHistory);
 
 router.get('/getCurrencyHistory', controllers.getCurrencyHistory);
-
-router.get('/', controllers.getRoot);
 
 router.get('/signup', controllers.getSignUp);
 

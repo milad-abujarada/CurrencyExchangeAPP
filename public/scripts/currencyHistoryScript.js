@@ -1,5 +1,11 @@
 console.log('file is working');
 var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function() {
+	let checkLocalhost = document.getElementById("localhost"), URI;
+	if(checkLocalhost.innerText === "true") {
+		URI = 'http://localhost:3000/getCurrencyHistory';
+	} else {
+		URI = 'https://mysterious-waters-61063.herokuapp.com/getCurrencyHistory';
+	};
 	let selectFrom = $("#currencyFrom").val();
 	from = getCountryName(selectFrom);
 	let selectTo = $("#currencyTo").val();
@@ -14,10 +20,9 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	if(commentDiv){
 		commentDiv.parentNode.removeChild(commentDiv);
 	};
-	
+	console.log("URI",URI);
 	$.ajax({
-		// https://mysterious-waters-61063.herokuapp.com
-		url:'http://localhost:3000/getCurrencyHistory', 
+		url:URI,
 		data:{ 
 			from:from, 
 			to:to, 
@@ -25,6 +30,7 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 			toDate:toDate 
 		}
 	}).done(function(res) {
+		/*console.log(res);*/
 		response = JSON.parse(res);
 		
 		//console.log(typeof(response));

@@ -1,13 +1,15 @@
-const request = require('request');
-const passport = require('passport');
+const request_module = require('request');
 const  APIkey = process.env.APIkey || require('../config/env');
-const Currency = require('../models/currency');
-const ExchangeRate = require('../models/exchangeRate');
+const index = require('../models/index');
+const Currency = index.Currency;
+const ExchangeRate = index.ExchangeRate;
+/*const passport = require('passport');*/
+
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 
 function getCurrenciesInfo(request, response){
 	let URL = URL_prefix + 'countries?apiKey=' + APIkey;
-	request(URL, function(req, res, body){
+	request_module(URL, function(req, res, body){
 		let drop = new Currency();
 		drop.collection.remove();
 		let currencies = JSON.parse(body);
@@ -30,27 +32,68 @@ function getCurrenciesInfo(request, response){
 	};
 };
 
+function getRoot(request, response){
+	let currencies = [];
+	Currency.find({}, null, {sort:{countryName:1}})
+		.then(results => {
+			let localhost = checkLocalhostOrHeroku();
+			response.render('landingPage', {currencies:results,heroku:localhost});
+		});
+};
+
+function getExchangeRate(request, response){
+	Currency.find({countryName:{ $in: [request.query.from,request.query.to]}}, 
+					{currencyId:1, _id:0},
+					(error, result) => {
+						let URL = URL_prefix + 'convert?q=' + result[0]['currencyId'] + '_' + result[1]['currencyId'] + ',' + result[1]['currencyId'] + '_' + result[0]['currencyId'] + '&compact=ultra&apiKey=' + APIkey;
+						request_module(URL, (req,res) => {
+							response.json(res.body)
+						});
+					}
+	)
+};
 
 function newExchangeRate(request, response){
-	//let newCurrency = new Currency();
-	Currency.find({})/*.sort( { countryName: 1 }).toArray(function(err, currencies){
-		response.render('newExchangeRate', {currencies:currencies});
-	})*/;
-};
-
-
-function getExchangeRate(req, response){
-	let fromCurrency = new Currency;
-	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
-		let toCurrency = new Currency;
-		toCurrency.collection.find({countryName:req.query.to}, {currencyId:1, _id:0}).toArray(function(err, doc_to){
-			let URL = URL_prefix + 'convert?q=' + doc_from[0]['currencyId'] + '_' + doc_to[0]['currencyId'] + ',' + doc_to[0]['currencyId'] + '_' + doc_from[0]['currencyId'] + '&compact=ultra&apiKey=' + APIkey;
-			request(URL,  function(req,res){
-				response.json(res.body)
-			});
+	Currency.find({}, null, {sort:{countryName:1}})
+		.then(results => {
+			let localhost = checkLocalhostOrHeroku();
+			response.render('newExchangeRate', {currencies:results, heroku:localhost});
 		});
-	});
 };
+
+function newCurrencyHistory(request, response){
+
+	Currency.find({}, null, {sort:{countryName:1}})
+		.then(results => {
+			let localhost = checkLocalhostOrHeroku()
+			response.render('newCurrencyHistory', {currencies:results,heroku:localhost});
+		});
+};
+
+function getCurrencyHistory(request, response){
+	Currency.find({countryName:{$in:[request.query.from, request.query.to]}},
+					{currencyId:1, _id:0},
+					(error, result) => {
+						let URL = URL_prefix + 'convert?q=' + result[0]['currencyId'] + '_' + result[1]['currencyId'] + ',' + result[1]['currencyId'] + '_' + result[0]['currencyId'] + '&compact=ultra&' + 'date=' + request.query.fromDate + '&endDate=' + request.query.toDate + '&apiKey=' + APIkey; 
+						
+						request_module(URL, (req,res) => {
+							response.json(res.body)
+						});					
+					}
+	);
+};
+
+let checkLocalhostOrHeroku = () => {
+	let localhost;
+	if (process.env.PORT){
+			localhost = false;
+		} else {
+			localhost = true;
+		};
+		return localhost;
+};
+
+
 
 
 function postExchangeRate(request, response){
@@ -65,49 +108,20 @@ function postExchangeRate(request, response){
 };
 
 
-function newCurrencyHistory(req, res){
-	let newCurrency = new Currency();
-	newCurrency.collection.find().sort( { countryName: 1 }).toArray(function(err, currencies){
-		//console.log(currencies[0]['countryName'] + ' / ' + currencies[0]['currencyName'] + ' / ' + currencies[0]['currencySymbol']);
-		res.render('newCurrencyHistory', {currencies:currencies});
-	});
-};
+
 
 //https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
-function getCurrencyHistory(req, response){
-	console.log(req);
-	let fromCurrency = new Currency();
-	fromCurrency.collection.find({countryName:req.query.from}, {currencyId:1, _id:0}).toArray(function(err, doc_from){
-		let toCurrency = new Currency;
-		toCurrency.collection.find({countryName:req.query.to}, {currencyId:1, _id:0}).toArray(function(err, doc_to){
-			let URL = URL_prefix + 'convert?q=' + doc_from[0]['currencyId'] + '_' + doc_to[0]['currencyId'] + ',' + doc_to[0]['currencyId'] + '_' + doc_from[0]['currencyId'] + '&compact=ultra&' + 'date=' + req.query.fromDate + '&endDate=' + req.query.toDate + '&apiKey=' + APIkey;
-			request(URL,  function(req,res){
-				response.json(res.body)
-			});
-		});
-	});
-};
 
 
-function getRoot(request, response){
-	let newCurrency = new Currency();
-	let currencies = [];
-	newCurrency.collection.find().sort( { countryName: 1 }).forEach(function(results){
-		currencies.push(results);
-	}, function(){
-		
-		let localhost = checkLocalhostOrHeroku();
-		response.render('landingPage', {currencies:currencies,heroku:localhost});
-	});
-	console.log(process.env.PORT);
-};
 
 
-function getSignUp(request, response){
+
+
+function getSignUp(req, response){
 	response.render('signup');
 }
 
-function postSignUp(request, response, next){
+function postSignUp(req, response, next){
 	let signupStrategy = passport.authenticate('local-signup',{
 		successRedirect:'/',
 		failureRedirect:'/signup',
@@ -117,21 +131,12 @@ function postSignUp(request, response, next){
 	return signupStrategy(request, ressponse, next);
 }
 
-let checkLocalhostOrHeroku = () => {
-	let localhost;
-	if (process.env.PORT){
-			localhost = false;
-		} else {
-			localhost = true;
-		};
-		return localhost;
-};
 
 module.exports.getCurrenciesInfo = getCurrenciesInfo;
-module.exports.newExchangeRate = newExchangeRate;
+module.exports.getRoot = getRoot;
 module.exports.getExchangeRate = getExchangeRate;
+module.exports.newExchangeRate = newExchangeRate;
 module.exports.newCurrencyHistory = newCurrencyHistory;
 module.exports.getCurrencyHistory = getCurrencyHistory;
-module.exports.getRoot = getRoot;
 module.exports.getSignUp = getSignUp;
 module.exports.postSignUp = postSignUp;
