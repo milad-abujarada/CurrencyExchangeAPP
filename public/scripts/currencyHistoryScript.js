@@ -55,8 +55,8 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		for(let property in res){
 			ids.push(property);
 		};*/
-		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
-		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
+		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
+		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
 
 
 		var ctx = document.getElementById('myChart').getContext('2d');
