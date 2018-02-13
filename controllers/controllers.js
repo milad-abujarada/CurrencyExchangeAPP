@@ -45,8 +45,10 @@ function getExchangeRate(request, response){
 	Currency.find({countryName:{ $in: [request.query.from,request.query.to]}}, 
 					{currencyId:1, _id:0},
 					(error, result) => {
+						console.log(">>>>>>>",result);
 						let URL = URL_prefix + 'convert?q=' + result[0]['currencyId'] + '_' + result[1]['currencyId'] + ',' + result[1]['currencyId'] + '_' + result[0]['currencyId'] + '&compact=ultra&apiKey=' + APIkey;
 						request_module(URL, (req,res) => {
+							console.log(res.body);
 							response.json(res.body)
 						});
 					}
