@@ -9,4 +9,5 @@ let exchangeRate = new mongoose.Schema({
 	comments: String
 });
 let ExchangeRate = mongoose.model('ExchangeRateHistory', exchangeRate);
+
 module.exports = ExchangeRate;

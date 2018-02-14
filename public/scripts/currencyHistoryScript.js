@@ -20,7 +20,6 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	if(commentDiv){
 		commentDiv.parentNode.removeChild(commentDiv);
 	};
-	console.log("URI",URI);
 	$.ajax({
 		url:URI,
 		data:{ 
@@ -99,9 +98,36 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		commentDiv.appendChild(commentLabel);
 		let commentTextarea = document.createElement("textarea");
 		commentDiv.appendChild(commentTextarea);
+		commentTextarea.setAttribute("id", "commentTextarea");
 		let saveButton =  document.createElement("button");
+		saveButton.setAttribute("id", "saveButton")
 		saveButton.innerText = "save search result";
 		commentDiv.appendChild(saveButton);
+		document.getElementById("saveButton").addEventListener("click", () => {
+			if (checkLocalhost.innerText === "true") {
+				URI = 'http://localhost:3000/currencyHistory/save';
+			} else {
+				URI = 'https://mysterious-waters-61063.herokuapp.com/currencyHistory/save';
+			};
+			let commentText = $("#commentTextarea").val();
+			$.ajax({
+				url:URI,
+				method:'POST',
+				data: {
+					date: Date(),
+					from: selectFrom,
+					to: selectTo,
+					fromRates: dataFrom,
+					toRates: dataTo,
+					historyDates: dates,
+					comment: commentText
+				}
+			}).done(error => {
+				if (!error) { 
+					location.reload();
+				};
+			});
+		});
 		//console.log(body);
 		/*document.body.appendChild(commentLabel);
 		document.body.appendChild(textArea);

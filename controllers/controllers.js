@@ -2,7 +2,9 @@ const request_module = require('request');
 const  APIkey = process.env.APIkey || require('../config/env');
 const index = require('../models/index');
 const Currency = index.Currency;
+const HistoryExchangeRate = index.HistoryExchangeRate;
 const ExchangeRate = index.ExchangeRate;
+
 /*const passport = require('passport');*/
 
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
@@ -67,7 +69,7 @@ function newCurrencyHistory(request, response){
 
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
-			let localhost = checkLocalhostOrHeroku()
+			let localhost = checkLocalhostOrHeroku();
 			response.render('newCurrencyHistory', {currencies:results,heroku:localhost});
 		});
 };
@@ -85,6 +87,19 @@ function getCurrencyHistory(request, response){
 	);
 };
 
+let saveHistoryExchange = (request,response) => {
+	console.log(request.body);
+	HistoryExchangeRate.create({
+		date: request.body.date,
+		from: request.body.from,
+		to: request.body.to,
+		fromRates: request.body.fromRates,
+		toRates: request.body.toRates,
+		historyDates: request.body.historyDates,
+		comment: request.body.comment
+	}, (error,result) => response.send(error));
+};
+
 let checkLocalhostOrHeroku = () => {
 	let localhost;
 	if (process.env.PORT){
@@ -95,10 +110,21 @@ let checkLocalhostOrHeroku = () => {
 		return localhost;
 };
 
+let previousActivity = (request,response) => {
+	HistoryExchangeRate.find({}, null, {sort:{date:-1}})
+		.then( results => {
+			console.log(results[0].from); 
+			let localhost = checkLocalhostOrHeroku();
+			response.render('previousActivity', {data:results,heroku:localhost});
+		});
+};
 
-
-
-function postExchangeRate(request, response){
+let deleteCurrencyHistory = (request, response) => {
+	HistoryExchangeRate.findByIdAndRemove(request.params.id, error => {
+		response.send(error);
+	});
+}
+/*function postExchangeRate(request, response){
 	let exchangeRate = new ExchangeRate();
 	exchangeRate.date = Date();
 	exchangeRate.from = request.body.from;
@@ -107,14 +133,7 @@ function postExchangeRate(request, response){
 	exchangeRate.toRate = request.body.toRate;
 	exchangeRate.comments = request.body.comments;
 	exchangeRate.save();
-};
-
-
-
-
-//https://www.currencyconverterapi.com/api/v5/convert?q=USD_EUR&compact=ultra&date=2017-05-01&endDate=2018-01-15&apiKey=1494928f-1674-4161-a596-f9fae74473f0
-
-
+};*/
 
 
 
@@ -139,6 +158,9 @@ module.exports.getRoot = getRoot;
 module.exports.getExchangeRate = getExchangeRate;
 module.exports.newExchangeRate = newExchangeRate;
 module.exports.newCurrencyHistory = newCurrencyHistory;
+module.exports.saveHistoryExchange = saveHistoryExchange;
 module.exports.getCurrencyHistory = getCurrencyHistory;
+module.exports.previousActivity = previousActivity;
+module.exports.deleteCurrencyHistory = deleteCurrencyHistory;
 module.exports.getSignUp = getSignUp;
 module.exports.postSignUp = postSignUp;

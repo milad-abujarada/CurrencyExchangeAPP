@@ -1,0 +1,27 @@
+<%- include header.ejs %>
+<table>
+	<tr>
+		<th>Date</th>
+		<th>Type</th>
+		<th>From</th>
+		<th>To</th>
+		<th>comment</th>
+		<th>Action</th>
+	</tr>
+
+	<% for (let i = 0; i< data.length; i++) { %>
+	<tr style="border: 2px solid black;">
+		<td><%= data[i].date%></td>
+		<td>Exchange rate history</td>
+		<td><%= data[i].from%></td>
+		<td><%= data[i].to%></td>
+		<td><%=data[i].comment%></td>
+		<td> 
+			<button id=<%= data[i]._id%> class="edit">EDIT COMMENT</button>
+			<button id=<%= data[i]._id%> class="delete">DELETE</button>
+		</td>
+	<tr>
+	<%}%>
+	<div id="localhost" style="display:none;"><%= heroku%></div>
+</table>
+<script type="text/javascript" src="/scripts/previousActivityScript.js"></script>

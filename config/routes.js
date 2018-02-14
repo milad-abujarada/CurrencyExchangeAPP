@@ -14,6 +14,12 @@ router.get('/currencyHistory/new', controllers.newCurrencyHistory);
 
 router.get('/getCurrencyHistory', controllers.getCurrencyHistory);
 
+router.post('/currencyHistory/save', controllers.saveHistoryExchange);
+
+router.get('/previousActivity', controllers.previousActivity);
+
+router.delete('/currencyHistory/:id', controllers.deleteCurrencyHistory);
+
 router.get('/signup', controllers.getSignUp);
 
 router.post('/signup', controllers.postSignUp);

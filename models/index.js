@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Currency = require('./currency');
 const ExchangeRate = require('./exchangeRate');
+const HistoryExchangeRate = require('./historyExchangeRate');
 
 let dbConnection = mongoose.connect(process.env.MONGODB_URI ||
                  process.env.MONGOLAB_URI ||
@@ -32,5 +33,6 @@ newUser.create({
 
 module.exports = {
 	Currency,
-	ExchangeRate
+	ExchangeRate,
+	HistoryExchangeRate
 };
