@@ -113,9 +113,14 @@ let checkLocalhostOrHeroku = () => {
 let previousActivity = (request,response) => {
 	HistoryExchangeRate.find({}, null, {sort:{date:-1}})
 		.then( results => {
-			console.log(results[0].from); 
+			console.log(results/*[0].from*/); 
 			let localhost = checkLocalhostOrHeroku();
-			response.render('previousActivity', {data:results,heroku:localhost});
+			if (results.length){
+				response.render('previousActivity', {data:results,heroku:localhost});
+			} else {
+				response.render('noResults');
+			}
+			
 		});
 };
 
