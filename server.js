@@ -1,16 +1,9 @@
 const express = require('express');
 const app = express();
-
 const bodyParser = require('body-parser');
-
 /*const passport = require('passport');
-
 const session = require('express-session');
-
 const flash = require('connect-flash');*/
-
-
-
 const router = require(__dirname + '/config/routes');
 
 var PORT = process.env.PORT || 3000;
