@@ -20,6 +20,8 @@ router.get('/previousActivity', controllers.previousActivity);
 
 router.delete('/currencyHistory/:id', controllers.deleteCurrencyHistory);
 
+router.put('/currencyHistory/:id', controllers.putCurrencyHistory);
+
 router.get('/signup', controllers.getSignUp);
 
 router.post('/signup', controllers.postSignUp);

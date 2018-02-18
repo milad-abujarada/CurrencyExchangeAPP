@@ -128,7 +128,15 @@ let deleteCurrencyHistory = (request, response) => {
 	HistoryExchangeRate.findByIdAndRemove(request.params.id, error => {
 		response.send(error);
 	});
-}
+};
+
+let putCurrencyHistory = (request, response) => {
+	HistoryExchangeRate.findByIdAndUpdate(request.params.id, {comment: request.body.newComment}, error => {
+		response.send(error);
+	})
+	/*console.log('request id >>>>', request.params.id, 'request body >>>>>', request.body);*/
+};
+
 /*function postExchangeRate(request, response){
 	let exchangeRate = new ExchangeRate();
 	exchangeRate.date = Date();
@@ -167,5 +175,6 @@ module.exports.saveHistoryExchange = saveHistoryExchange;
 module.exports.getCurrencyHistory = getCurrencyHistory;
 module.exports.previousActivity = previousActivity;
 module.exports.deleteCurrencyHistory = deleteCurrencyHistory;
+module.exports.putCurrencyHistory = putCurrencyHistory;
 module.exports.getSignUp = getSignUp;
 module.exports.postSignUp = postSignUp;

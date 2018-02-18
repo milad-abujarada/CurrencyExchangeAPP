@@ -1,62 +1,74 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<div class="container-fluid">
-	<div class="col-12">
-		<h1>Xchange it</h1>
-		<div class="col-sm-4">
-			<ul>
-				<li>Exchange rates for 200+ currencies.</li>
-				<li>Up to the minute currency exchange rates.</li>
-				<li>Up to a year of history of a currancy exchange rates.</li>
-				<li>Create an account and have access to your search results history.</li>
-			</ul>
-		</div>
-		<div class="col-sm-4">
-			<form method="GET" action="/exchageRate/new" >
-				<div class="form-group" class="col-xs-4">
-					<label class="form-group" class="sr-only">User name:</label>
-					<input type="email" name="userName"  class="form-control">
+<%- include header.ejs %>
+	<body style="background-color:#B4DCED;">
+		<div class="container">
+			<div class="page-header">
+				<h1 class="text-center text-uppercase">Xchange it!</h1>
+			</div>
+			<hr>
+			<p class="text-center">Exchange rates for 200+ currencies</p>
+			<p class="text-center">Up to the minute currency exchange rates</p>
+			<p class="text-center">Up to a year of history of a currancy exchange rates</p>
+			<p class="text-center">Create an account and have access to your search results history</p>
+			<hr>
+			<div class="text-center container" style="width:60%;">
+				<form method="GET" action="/exchageRate/new" class="form-inline">
+					<div class="form-group">
+						<label for="userName">User name:</label>
+						<input id="userName" type="email" name="userName" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="password">Password:</label>
+						<input id="password" type="password" name="password" class="form-control">
+					</div>
+					<button type="submit" class="btn btn-info btn-md">LOG IN</button>
+				</form>
+				Don't have an account? <a href="/signup">SIGN UP</a> 
+			</div>
+			<div class="text-center">
+				<label for="tryIt">Try it:</label>
+			</div>
+			<div id="tryIt" style="width:50%;" class="text-center container">
+				<div class="row">
+					<form class="form-horizontal">
+						<div class="row form-group">
+							<label class="control-label" for="from">Exchange:</label>
+							<select id="from" class="form-control">
+								<% for(let i = 0; i < currencies.length; i++){ %>
+									<% if(currencies[i].currencySymbol){%>
+											<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+										<%} else {%>
+											<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+										<%}%>
+								<% } %>
+							</select>
+						</div>
+						<div class="row form-group">
+							<label class="control-label" for="to"> To:</label>
+							<select id="to" class="form-control">
+								<% for(let i = 0; i < currencies.length; i++){ %>
+									<% if(currencies[i].currencySymbol){%>
+											<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+										<%} else {%>
+											<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+										<%}%>
+								<% } %>
+							</select>
+						</div>
+					</form>
+					
 				</div>
-				<div class="form-group" class="col-xs-4">
-					<label class="form-group" class="sr-only">Password:</label>
-					<input type="password" name="password"  class="form-control">
-				</div>
-				<input type="submit" value="LOG IN" class="btn btn-info btn-primary btn-md">
-			</form>
-			Don't have an account? <a href="/signup">SIGN UP</a> 
+				<input type="button" value="Xchange it!" id="xchangeIt" class="btn btn-info btn-md">
+			</div>
+			<br>
+			<div class="text-center container">
+				<!-- <label for="result"> Exchange rate:</label>
+			    <br> -->
+				<div id="result"></div>
+				<div id="reverseResult"></div>
+			</div>
+			<div id="localhost" style="display:none;"><%= heroku%></div>
 		</div>
-	</div>
-	<div id="tryIt" class="col-sm-6">
-		<label for="tryIt">Try it:</label>	
-		<label>Exchange:
-			<select id="from">
-				<% for(let i = 0; i < currencies.length; i++){ %>
-					<% if(currencies[i].currencySymbol){%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-						<%} else {%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-						<%}%>
-				<% } %>
-			</select>
-		</label>
-		<label> To:
-			<select id="to">
-				<% for(let i = 0; i < currencies.length; i++){ %>
-					<% if(currencies[i].currencySymbol){%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-						<%} else {%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-						<%}%>
-				<% } %>
-			</select>
-		</label>
-		<input type="button" value="Xchange it!" id="xchangeIt" class="btn btn-info btn-primary btn-md">
-		<label for="result"> Exchange rate:</label>
-		<br>
-		<div id="result"></div>
-		<div id="reverseResult"></div>
-	</div>
-	<div id="localhost" style="display:none;"><%= heroku%></div>
-</div>
-<script type="text/javascript" src='/scripts/landingPageScript.js' ></script>
+		<script type="text/javascript" src='/scripts/landingPageScript.js' ></script>
+	<%- include footer.ejs %>
+
+		

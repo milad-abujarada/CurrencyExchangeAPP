@@ -1,27 +1,31 @@
 <%- include header.ejs %>
-<table>
-	<tr>
-		<th>Date</th>
-		<th>Type</th>
-		<th>From</th>
-		<th>To</th>
-		<th>comment</th>
-		<th>Action</th>
-	</tr>
+<%- include navBar.ejs %>
+<div class="container">
+	<table class="table table-striped table-hover table-bordered table-condensed">
+		<tr>
+			<th>Date</th>
+			<th>Type</th>
+			<th>From</th>
+			<th>To</th>
+			<th>comment</th>
+			<th>Action</th>
+		</tr>
 
-	<% for (let i = 0; i< data.length; i++) { %>
-	<tr style="border: 2px solid black;">
-		<td><%= data[i].date%></td>
-		<td>Exchange rate history</td>
-		<td><%= data[i].from%></td>
-		<td><%= data[i].to%></td>
-		<td><%=data[i].comment%></td>
-		<td> 
-			<button id=<%= data[i]._id%> class="edit">EDIT COMMENT</button>
-			<button id=<%= data[i]._id%> class="delete">DELETE</button>
-		</td>
-	<tr>
-	<%}%>
+		<% for (let i = 0; i< data.length; i++) { %>
+		<tr>
+			<td><%= data[i].date%></td>
+			<td>Exchange rate history</td>
+			<td><%= data[i].from%></td>
+			<td><%= data[i].to%></td>
+			<td id=<%= "comment"+data[i]._id%>><%=data[i].comment%></td>
+			<td> 
+				<button id=<%= data[i]._id%> class="edit btn-warning btn-md">EDIT</button>
+				<button id=<%= data[i]._id%> class="delete btn-danger btn-md">DELETE</button>
+			</td>
+		<tr>
+		<%}%>
+	</table>
 	<div id="localhost" style="display:none;"><%= heroku%></div>
-</table>
+</div>
 <script type="text/javascript" src="/scripts/previousActivityScript.js"></script>
+<%- include footer.ejs %>

@@ -54,8 +54,15 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		for(let property in res){
 			ids.push(property);
 		};*/
-		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
-		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
+		let fromCurrencyAndSymbol, toCurrencyAndSymbol;
+		if(checkLocalhost.innerText === "true"){
+			fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
+			toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
+		} else {
+			fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
+			toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
+		}
+			
 
 
 		var ctx = document.getElementById('myChart').getContext('2d');
@@ -91,18 +98,39 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		//let body = document.getElementsByTagName("body");
 		let commentDiv =  document.createElement("div");
 		commentDiv.setAttribute("id", "commentDiv");
-		document.body.appendChild(commentDiv);
+
+		let commentForm = document.createElement("form");
+		commentForm.setAttribute("class", "form-horizontal");
+		let formGroupDiv = document.createElement("div");
+		formGroupDiv.setAttribute("class", "form-group");
+		commentForm.appendChild(formGroupDiv);
 		let commentLabel = document.createElement("label");
-		commentLabel.innerText ="comment";
-		commentDiv = document.getElementById("commentDiv");
-		commentDiv.appendChild(commentLabel);
+		commentLabel.innerText ="comment:";
+		commentLabel.setAttribute("class", "control-label");
+		commentLabel.setAttribute("for", "commentTextarea");
+		formGroupDiv.appendChild(commentLabel);
 		let commentTextarea = document.createElement("textarea");
-		commentDiv.appendChild(commentTextarea);
 		commentTextarea.setAttribute("id", "commentTextarea");
+		commentTextarea.setAttribute("class", "form-control");
+		formGroupDiv.appendChild(commentTextarea);
+
+		commentDiv.appendChild(commentForm);
+
+		//commentDiv.appendChild(commentForm);
+		//commentDiv.className = "container";
+		//document.body.appendChild(commentDiv);
+		
+		//commentDiv = document.getElementById("commentDiv");
+		//commentDiv.appendChild(commentLabel);
+		
+		//commentDiv.appendChild(commentTextarea);
+		
 		let saveButton =  document.createElement("button");
-		saveButton.setAttribute("id", "saveButton")
+		saveButton.setAttribute("id", "saveButton");
+		saveButton.setAttribute("class", "btn btn-info btn-md");
 		saveButton.innerText = "save search result";
 		commentDiv.appendChild(saveButton);
+		document.body.appendChild(commentDiv);
 		document.getElementById("saveButton").addEventListener("click", () => {
 			if (checkLocalhost.innerText === "true") {
 				URI = 'http://localhost:3000/currencyHistory/save';

@@ -23,11 +23,20 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
 		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
 		$("#result").html("");
-		$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[1]])
-		if(selectFrom !== selectTo){
-			$("#reverseResult").html("");
-			$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[0]] );
+		if (checkLocalhost.innerText === "true") {
+			$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[0]])
+			if(selectFrom !== selectTo){
+				$("#reverseResult").html("");
+				$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[1]]);
+			} else {
+				$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[1]])
+				if(selectFrom !== selectTo){
+					$("#reverseResult").html("");
+					$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[0]]);
+				};
+			};
 		};
+			
 	});
 });
 function getCountryName(string){

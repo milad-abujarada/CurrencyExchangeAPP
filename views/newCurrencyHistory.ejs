@@ -1,45 +1,55 @@
 
 <%- include header.ejs %>
-
-<div class="container-fluid">
-	<div class="col-sm-6">
-		<label>Exchange:
-			<select id="currencyFrom">
-				<% for(let i = 0; i < currencies.length; i++){ %>
-					<% if(currencies[i].currencySymbol){%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-						<%} else {%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-						<%}%>
-				<% } %>
-			</select>
-		</label>
-		<label> To:
-			<select id="currencyTo">
-				<% for(let i = 0; i < currencies.length; i++){ %>
-					<% if(currencies[i].currencySymbol){%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-						<%} else {%>
-							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-						<%}%>
-				<% } %>
-			</select>
-		</label>
+<%- include navBar.ejs %>
+	<div class="text-center">
+		<form class="form-inline">
+			<div class="form-group">
+				<label class="control-label" for="currencyFrom">Exchange:</label>
+				<select id="currencyFrom" class="form-control">
+					<% for(let i = 0; i < currencies.length; i++){ %>
+						<% if(currencies[i].currencySymbol){%>
+								<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+							<%} else {%>
+								<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+							<%}%>
+					<% } %>
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="currencyTo">To:</label>
+				<select id="currencyTo" class="form-control">
+					<% for(let i = 0; i < currencies.length; i++){ %>
+						<% if(currencies[i].currencySymbol){%>
+								<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+							<%} else {%>
+								<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+							<%}%>
+					<% } %>
+				</select>
+			</div>
+		</form>
+		<br>
+		<div class="text-center" style="width:40%; margin:auto;">
+			<form class="form-inline">
+				<div class="form-group">
+					<label class="control-label" for="fromDate">From:</label>
+					<input class="form-control" type="date" name="fromDate" id="fromDate">
+					
+					<label class="control-label" for="toDate">To:</label>
+					<input class="form-control" type="date" name="toDate" id="toDate">	
+				</div>
+			</form>
+		</div>
 	</div>
-	<div class="col-sm-8">
-		<label>From:
-			<input type="date" name="fromDate" id="fromDate">
-		</label>
-		<label>To:
-			<input type="date" name="toDate" id="toDate">
-		</label>
-		<input type="button" value="Xchange it! History" id="xchangeIt" class="btn btn-info btn-primary btn-md">
+	<br>
+	<div class="text-center">
+		<button class="btn btn-info btn-primary btn-md" id="xchangeIt">Xchange it! History</button>
 	</div>
-	<div> Exchange rate History:</div>
+	<br>
+	<div class="text-center"> Exchange rate History:</div>
 	<div style="width:75%; margin: 0 auto;">
-
 		<canvas id="myChart" ></canvas>
 	</div>
 	<div id="localhost" style="display:none;"><%= heroku%></div>
-</div>
 <script type="text/javascript" src='/scripts/currencyHistoryScript.js' ></script>
+<%- include footer.ejs %>

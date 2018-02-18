@@ -1,28 +1,38 @@
 <%- include header.ejs %>
-<div class="col-sm-6">	
-	<label>Exchange:
-		<select id="from">
-			<% for(let i = 0; i < currencies.length; i++){ %>
-				<% if(currencies[i].currencySymbol){%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-					<%} else {%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-					<%}%>
-			<% } %>
-		</select>
-	</label>
-	<label> To:
-		<select id="to">
-			<% for(let i = 0; i < currencies.length; i++){ %>
-				<% if(currencies[i].currencySymbol){%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
-					<%} else {%>
-						<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
-					<%}%>
-			<% } %>
-		</select>
-	</label>
-	<input type="button" value="Xchange it!" id="xchangeIt" class="btn btn-info btn-primary btn-md">
+<%- include navBar.ejs %>
+<div>	
+	<form class="form-inline">
+		<div class="form-group">
+			<label class="control-label" for="from">Exchange:</label>
+			<select id="from" class="form-control">
+				<% for(let i = 0; i < currencies.length; i++){ %>
+					<% if(currencies[i].currencySymbol){%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+						<%} else {%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+						<%}%>
+				<% } %>
+			</select>
+		</div>
+		<div class="form-group">
+			<label class="control-label" for="to"> To:</label>
+			<select id="to" class="form-control">
+				<% for(let i = 0; i < currencies.length; i++){ %>
+					<% if(currencies[i].currencySymbol){%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName + ' / ' + currencies[i].currencySymbol%></option>
+						<%} else {%>
+							<option><%= currencies[i].countryName + ' / ' + currencies[i].currencyName %></option>
+						<%}%>
+				<% } %>
+			</select>
+		</div> 
+	</form>
+</div>
+<br>
+<div class="text-center">
+		<button id="xchangeIt" class="btn btn-info btn-primary btn-md text-uppercase">Xchange it!</button>
+</div>
+<div class="text-center">
 	<label for="result"> Exchange rate:</label>
 	<br>
 	<div id="result"></div>
@@ -30,3 +40,4 @@
 	<div id="localhost" style="display:none;"><%= heroku%></div>
 </div>
 <script type="text/javascript" src='/scripts/landingPageScript.js' ></script>
+<%- include footer.ejs %>
