@@ -10,33 +10,34 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 	from = getCountryName(selectFrom);
 	let selectTo = $("#to").val();
 	to = getCountryName(selectTo);
-	$.ajax({
-		url:URI, 
-		data:{ from:from, to:to }
-	}).done(function(res){
-		res = JSON.parse(res);
-		let ids = [];
-		for(let property in res){
-			ids.push(property);
-		};
-		let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
-		let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
-		$("#result").html("");
-		if (checkLocalhost.innerText === "true") {
-			$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[0]])
-			if(selectFrom !== selectTo){
-				$("#reverseResult").html("");
+	$("#result").html("");
+	$("#reverseResult").html("");
+	if(selectFrom !== selectTo){
+		$.ajax({
+			url:URI, 
+			data:{ 
+				from:from, 
+				to:to 
+			}
+		}).done(function(res){
+			res = JSON.parse(res);
+			let ids = [];
+			for(let property in res){
+				ids.push(property);
+			};
+			let fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
+			let toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
+			if (checkLocalhost.innerText === "true") {
+				$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[0]])
 				$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[1]]);
 			} else {
 				$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[1]])
-				if(selectFrom !== selectTo){
-					$("#reverseResult").html("");
-					$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[0]]);
-				};
-			};
-		};
-			
-	});
+				$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[0]]);
+			}; 
+		});
+	} else {
+		$("#result").append("Please select two different currencies");
+	};
 });
 function getCountryName(string){
 	let index = 0;
