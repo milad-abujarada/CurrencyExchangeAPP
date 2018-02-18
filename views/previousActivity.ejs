@@ -1,4 +1,5 @@
 <%- include header.ejs %>
+<!-- <link rel="stylesheet" href="../public/css/previousActivity.css"> -->
 <%- include navBar.ejs %>
 <div class="container">
 	<table class="table table-striped table-hover table-bordered table-condensed">
@@ -19,8 +20,8 @@
 			<td><%= data[i].to%></td>
 			<td id=<%= "comment"+data[i]._id%>><%=data[i].comment%></td>
 			<td> 
-				<button id=<%= data[i]._id%> class="edit btn-warning btn-md">EDIT</button>
-				<button id=<%= data[i]._id%> class="delete btn-danger btn-md">DELETE</button>
+				<button id=<%= data[i]._id%> class="edit btn-warning btn-md" style="width:100%; margin-bottom:5px;">EDIT</button>
+				<button id=<%= data[i]._id%> class="delete btn-danger btn-md" style="width:100%">DELETE</button>
 			</td>
 		<tr>
 		<%}%>
