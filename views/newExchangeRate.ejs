@@ -1,5 +1,8 @@
 <%- include header.ejs %>
 <%- include navBar.ejs %>
+<% if (message.length > 0) { %>
+	<div class="alert alert-success"><%= message %></div>
+<%}%>
 <div>	
 	<form class="form-inline">
 		<div class="form-group">

@@ -4,8 +4,7 @@ const index = require('../models/index');
 const Currency = index.Currency;
 const HistoryExchangeRate = index.HistoryExchangeRate;
 const ExchangeRate = index.ExchangeRate;
-
-/*const passport = require('passport');*/
+const passport = require('passport');
 
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 
@@ -39,7 +38,8 @@ function getRoot(request, response){
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
 			let localhost = checkLocalhostOrHeroku();
-			response.render('landingPage', {currencies:results,heroku:localhost});
+			console.log(request.flash.loginMessage);
+			response.render('landingPage', {currencies:results,heroku:localhost,loginMessage:request.flash('loginMessage'), logoutMessage:request.flash('logoutMessage')});
 		});
 };
 
@@ -47,7 +47,6 @@ function getExchangeRate(request, response){
 	Currency.find({countryName:{ $in: [request.query.from,request.query.to]}}, 
 					{currencyId:1, _id:0},
 					(error, result) => {
-						console.log(">>>>>>>",result);
 						let URL = URL_prefix + 'convert?q=' + result[0]['currencyId'] + '_' + result[1]['currencyId'] + ',' + result[1]['currencyId'] + '_' + result[0]['currencyId'] + '&compact=ultra&apiKey=' + APIkey;
 						request_module(URL, (req,res) => {
 							console.log(res.body);
@@ -61,12 +60,11 @@ function newExchangeRate(request, response){
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
 			let localhost = checkLocalhostOrHeroku();
-			response.render('newExchangeRate', {currencies:results, heroku:localhost});
+			response.render('newExchangeRate', {currencies:results, heroku:localhost, message: request.flash('successfulLogin')});
 		});
 };
 
 function newCurrencyHistory(request, response){
-
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
 			let localhost = checkLocalhostOrHeroku();
@@ -88,7 +86,7 @@ function getCurrencyHistory(request, response){
 };
 
 let saveHistoryExchange = (request,response) => {
-	console.log(request.body);
+	console.log(request.session);
 	HistoryExchangeRate.create({
 		date: request.body.date,
 		from: request.body.from,
@@ -96,7 +94,8 @@ let saveHistoryExchange = (request,response) => {
 		fromRates: request.body.fromRates,
 		toRates: request.body.toRates,
 		historyDates: request.body.historyDates,
-		comment: request.body.comment
+		comment: request.body.comment,
+		userId: request.session.passport.user
 	}, (error,result) => response.send(error));
 };
 
@@ -111,9 +110,9 @@ let checkLocalhostOrHeroku = () => {
 };
 
 let previousActivity = (request,response) => {
-	HistoryExchangeRate.find({}, null, {sort:{date:-1}})
+	HistoryExchangeRate.find({'userId': request.session.passport.user}, null, {sort:{date:-1}})
 		.then( results => {
-			console.log(results/*[0].from*/); 
+			console.log(results); 
 			let localhost = checkLocalhostOrHeroku();
 			if (results.length){
 				response.render('previousActivity', {data:results,heroku:localhost});
@@ -137,32 +136,34 @@ let putCurrencyHistory = (request, response) => {
 	/*console.log('request id >>>>', request.params.id, 'request body >>>>>', request.body);*/
 };
 
-/*function postExchangeRate(request, response){
-	let exchangeRate = new ExchangeRate();
-	exchangeRate.date = Date();
-	exchangeRate.from = request.body.from;
-	exchangeRate.to = request.body.to;
-	exchangeRate.fromRate = request.body.fromRate;
-	exchangeRate.toRate = request.body.toRate;
-	exchangeRate.comments = request.body.comments;
-	exchangeRate.save();
-};*/
-
-
-
-
-function getSignUp(req, response){
+let getSignUp = (request, response) => {
 	response.render('signup');
-}
+};
 
-function postSignUp(req, response, next){
+function postSignUp(request, response, next){
 	let signupStrategy = passport.authenticate('local-signup',{
-		successRedirect:'/',
+		successRedirect:'/exchageRate/new',
 		failureRedirect:'/signup',
 		failureFlash: true
 	});
 
-	return signupStrategy(request, ressponse, next);
+	return signupStrategy(request, response, next);
+};
+
+function login(request, response) {
+	let loginStrategy = passport.authenticate('local-login',{
+		successRedirect:'/exchageRate/new',
+		failureRedirect:'/',
+		failureFlash: true,
+		successFlash: true
+	});
+	return loginStrategy(request, response);
+};
+
+function logout(request, response){
+	request.logout();
+	request.flash('logoutMessage','Yor Are logged out!');
+	response.redirect('/');
 }
 
 
@@ -178,3 +179,6 @@ module.exports.deleteCurrencyHistory = deleteCurrencyHistory;
 module.exports.putCurrencyHistory = putCurrencyHistory;
 module.exports.getSignUp = getSignUp;
 module.exports.postSignUp = postSignUp;
+module.exports.login = login;
+module.exports.logout = logout;
+

@@ -7,7 +7,8 @@ let historyExchangeRate = new mongoose.Schema({
 	fromRates: {type:Array, required: true},
 	toRates: {type: Array, required: true},
 	historyDates: {type:Array, requied: true},
-	comment: String
+	comment: String,
+	userId: String
 });
 let HistoryExchangeRate = mongoose.model('HistoryExchangeRate', historyExchangeRate);
 
