@@ -6,8 +6,10 @@ const HistoryExchangeRate = index.HistoryExchangeRate;
 const ExchangeRate = index.ExchangeRate;
 const passport = require('passport');
 
+//setting up the fixed part of every request to the API
 var URL_prefix = 'https://www.currencyconverterapi.com/api/v5/';
 
+//this function just retrieves all the currencies info from the API in order to populate the select tags on the pages 
 function getCurrenciesInfo(request, response){
 	let URL = URL_prefix + 'countries?apiKey=' + APIkey;
 	request_module(URL, function(req, res, body){
@@ -33,6 +35,7 @@ function getCurrenciesInfo(request, response){
 	};
 };
 
+//function to responed with the / page
 function getRoot(request, response){
 	let currencies = [];
 	Currency.find({}, null, {sort:{countryName:1}})
@@ -43,6 +46,7 @@ function getRoot(request, response){
 		});
 };
 
+//function used to send a request to the API in order to retrieve currecy exchange between two currencies
 function getExchangeRate(request, response){
 	Currency.find({countryName:{ $in: [request.query.from,request.query.to]}}, 
 					{currencyId:1, _id:0},
@@ -56,6 +60,7 @@ function getExchangeRate(request, response){
 	)
 };
 
+//serving the first page after a user either logs in or logs out
 function newExchangeRate(request, response){
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
@@ -64,6 +69,7 @@ function newExchangeRate(request, response){
 		});
 };
 
+//serving the page that allow the user to inquire about the history of exchange between two currencies
 function newCurrencyHistory(request, response){
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
@@ -72,6 +78,7 @@ function newCurrencyHistory(request, response){
 		});
 };
 
+//getting the data for the history exchange from the API
 function getCurrencyHistory(request, response){
 	Currency.find({countryName:{$in:[request.query.from, request.query.to]}},
 					{currencyId:1, _id:0},
@@ -84,6 +91,7 @@ function getCurrencyHistory(request, response){
 	);
 };
 
+//saving the user's chosen search results from the histroy exchange between two currencies
 let saveHistoryExchange = (request,response) => {
 	console.log(request.session);
 	HistoryExchangeRate.create({
@@ -98,6 +106,8 @@ let saveHistoryExchange = (request,response) => {
 	}, (error,result) => response.send(error));
 };
 
+//function to check if the requests are being sent from heroku or local host
+//this is to develop once and use anywhere
 let checkLocalhostOrHeroku = () => {
 	let localhost;
 	if (process.env.PORT){
@@ -108,6 +118,7 @@ let checkLocalhostOrHeroku = () => {
 		return localhost;
 };
 
+//this function is to show the user's saved seraches for history exchange 
 let previousActivity = (request,response) => {
 	HistoryExchangeRate.find({'userId': request.session.passport.user}, null, {sort:{date:-1}})
 		.then( results => {
