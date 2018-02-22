@@ -68,7 +68,7 @@ function newCurrencyHistory(request, response){
 	Currency.find({}, null, {sort:{countryName:1}})
 		.then(results => {
 			let localhost = checkLocalhostOrHeroku();
-			response.render('newCurrencyHistory', {currencies:results,heroku:localhost});
+			response.render('newCurrencyHistory', {currencies:results,heroku:localhost, saved:request.flash('saved')});
 		});
 };
 
@@ -77,7 +77,6 @@ function getCurrencyHistory(request, response){
 					{currencyId:1, _id:0},
 					(error, result) => {
 						let URL = URL_prefix + 'convert?q=' + result[0]['currencyId'] + '_' + result[1]['currencyId'] + ',' + result[1]['currencyId'] + '_' + result[0]['currencyId'] + '&compact=ultra&' + 'date=' + request.query.fromDate + '&endDate=' + request.query.toDate + '&apiKey=' + APIkey; 
-						
 						request_module(URL, (req,res) => {
 							response.json(res.body)
 						});					
@@ -133,7 +132,6 @@ let putCurrencyHistory = (request, response) => {
 	HistoryExchangeRate.findByIdAndUpdate(request.params.id, {comment: request.body.newComment}, error => {
 		response.send(error);
 	})
-	/*console.log('request id >>>>', request.params.id, 'request body >>>>>', request.body);*/
 };
 
 let getSignUp = (request, response) => {
@@ -144,7 +142,8 @@ function postSignUp(request, response, next){
 	let signupStrategy = passport.authenticate('local-signup',{
 		successRedirect:'/exchageRate/new',
 		failureRedirect:'/signup',
-		failureFlash: true
+		failureFlash: true,
+		successFlash: true
 	});
 
 	return signupStrategy(request, response, next);
@@ -162,7 +161,6 @@ function login(request, response) {
 
 function logout(request, response){
 	request.logout();
-	request.flash('logoutMessage','Yor Are logged out!');
 	response.redirect('/');
 }
 

@@ -1,5 +1,6 @@
 console.log('file is working');
 var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', function() {
+	document.getElementById('saved').style.display = 'none';
 	let checkLocalhost = document.getElementById("localhost"), URI;
 	if(checkLocalhost.innerText === "true") {
 		URI = 'http://localhost:3000/getCurrencyHistory';
@@ -29,31 +30,20 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 			toDate:toDate 
 		}
 	}).done(function(res) {
-		/*console.log(res);*/
 		response = JSON.parse(res);
-		
-		//console.log(typeof(response));
 		var index = 0;
 		for (property in response){
-			//console.log(property);
 			for(nestedProperty in response[property]){
-				//console.log(response[property][nestedProperty]);
 				if(index){
 					dataTo.push(response[property][nestedProperty]);
 					dates.push(nestedProperty);
 				}else{
 					dataFrom.push(response[property][nestedProperty]);
 				};
-				//typeof(response[property].nestedProperty));
 			};
 			index++;
 		};
 		console.log("dataFrom", dataFrom, "\ndataTo", dataTo, "\ndates", dates);
-	/*	res = JSON.parse(res);
-		let ids = [];
-		for(let property in res){
-			ids.push(property);
-		};*/
 		let fromCurrencyAndSymbol, toCurrencyAndSymbol;
 		if(checkLocalhost.innerText === "true"){
 			fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
@@ -61,15 +51,11 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		} else {
 			fromCurrencyAndSymbol = getCurrencyNameAndSymbol(selectTo);
 			toCurrencyAndSymbol = getCurrencyNameAndSymbol(selectFrom);
-		}
-			
-
-
+		};
 		var ctx = document.getElementById('myChart').getContext('2d');
 		var chart = new Chart(ctx, {
 		    // The type of chart we want to create
 		    type: 'bar',
-
 		    // The data for our dataset
 		    data: {
 		        labels: dates,
@@ -85,17 +71,9 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		            data: dataTo,
 		        }]
 		    },
-
 		    // Configuration options go here
 		    options: {}
 		});
-/*		$("#result").html("");
-		$("#result").append(fromCurrencyAndSymbol + " to " + toCurrencyAndSymbol + ": " + res[ids[0]])
-		if(selectFrom !== selectTo){
-			$("#reverseResult").html("");
-			$("#reverseResult").append(toCurrencyAndSymbol + " to " + fromCurrencyAndSymbol + ": " + res[ids[1]] );
-		};*/
-		//let body = document.getElementsByTagName("body");
 		let commentDiv =  document.createElement("div");
 		commentDiv.setAttribute("id", "commentDiv");
 
@@ -113,18 +91,7 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 		commentTextarea.setAttribute("id", "commentTextarea");
 		commentTextarea.setAttribute("class", "form-control");
 		formGroupDiv.appendChild(commentTextarea);
-
 		commentDiv.appendChild(commentForm);
-
-		//commentDiv.appendChild(commentForm);
-		//commentDiv.className = "container";
-		//document.body.appendChild(commentDiv);
-		
-		//commentDiv = document.getElementById("commentDiv");
-		//commentDiv.appendChild(commentLabel);
-		
-		//commentDiv.appendChild(commentTextarea);
-		
 		let saveButton =  document.createElement("button");
 		saveButton.setAttribute("id", "saveButton");
 		saveButton.setAttribute("class", "btn btn-info btn-md");
@@ -152,16 +119,12 @@ var xchangeIt = document.getElementById("xchangeIt").addEventListener('click', f
 				}
 			}).done(error => {
 				if (!error) { 
-					location.reload();
+					//location.reload();
+					document.getElementById('commentDiv').remove();
+					document.getElementById('saved').style.display = 'block';
 				};
 			});
 		});
-		//console.log(body);
-		/*document.body.appendChild(commentLabel);
-		document.body.appendChild(textArea);
-		document.body.appendChild(button);*/
-		
-		/*document.createElement("label").appendChild("body");*/
 	});
 });
 function getCountryName(string){
